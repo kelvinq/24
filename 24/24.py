@@ -1,8 +1,13 @@
+import logging
 import sys
 from operator import __add__
 from operator import __sub__
 from operator import __truediv__
 from operator import __mul__
+
+if len(sys.argv) != 5:
+    print("Enter 4 digits separated by spaces.\nEg python3 24.py 1 2 3 4\n")
+    sys.exit()
 
 i = int(sys.argv[1])
 j = int(sys.argv[2])
@@ -32,9 +37,6 @@ solGridO = list(product(opGrid,repeat=3))
 for i in solGridO:
     for j in solGridN:
         solGridTries.append([i,j])
-        #print(solGridTries)
-
-#print("Done "+str(len(solGridTries))+" in total.")
 
 def solveOps(opers, x, y):
     try:
@@ -45,9 +47,12 @@ def solveOps(opers, x, y):
         if opers == "t":
             return __mul__(x,y)
         if opers == "d":
-            return __truediv__(x,y)
-    except:
-        print("Check operators or that parameters are integers.")
+            try:
+                return __truediv__(x,y)
+            except ZeroDivisionError:
+                return 9999
+    except BaseException:
+        logging.exception("An exception was thrown!")
 
 def solve24(solveTry):
     '''
@@ -60,6 +65,15 @@ def solve24(solveTry):
     a = solveOps(solveTry[0][0], solveTry[1][0], solveTry[1][1])
     b = solveOps(solveTry[0][1], a, solveTry[1][2])
     c = solveOps(solveTry[0][2], b, solveTry[1][3])
+    return c
+
+def solve24R(solveTry):
+    """
+    To solve the classic 5, 5, 5, 1 problem.
+    """
+    a = solveOps(solveTry[0][0], solveTry[1][1], solveTry[1][0])
+    b = solveOps(solveTry[0][1], solveTry[1][2], a)
+    c = solveOps(solveTry[0][2], solveTry[1][3], b)
     return c
 
 def OpsintoWords(opers):
@@ -105,8 +119,41 @@ def intoWords(solveTry):
            str(c)+"\n\n"
     print(message)
 
+def intoWordsR(solveTry):
+    """
+    Function to construct human readable solution.
+    """
+    a = solveOps(solveTry[0][0], solveTry[1][0], solveTry[1][1])
+    b = solveOps(solveTry[0][1], solveTry[1][2], a)
+    c = solveOps(solveTry[0][2], solveTry[1][3], b)
+    message = "Solution found! \n"+\
+           str(solveTry[1][0])+" "+\
+           OpsintoWords(solveTry[0][0])+" "+\
+           str(solveTry[1][1])+" "+" = "+\
+           str(a)+"\n"+\
+           str(solveTry[1][2])+" "+\
+           OpsintoWords(solveTry[0][1])+" "+\
+           str(a)+" "+" = "+\
+           str(b)+"\n"+\
+           str(solveTry[1][3])+" "+\
+           OpsintoWords(solveTry[0][2])+" "+\
+           str(b)+" "+" = "+\
+           str(c)+"\n\n"
+    print(message)
+
+solutionCount = 0
+#solGridTries = [[('d', 'm', 't'), (1, 5, 5, 5)]]
 for solveTry in solGridTries:
     if solve24(solveTry) == 24:
-        intoWords(solveTry)
+            solutionCount += 1 
+            intoWords(solveTry)
+    """
+    Some strange bugs here though it comes with more solutions.
+    """
+    elif solve24R(solveTry) == 24:
+            solutionCount += 1 
+            intoWordsR(solveTry)
     # else:
     #     print (".")
+if solutionCount == 0:
+    print("No solution found.")
