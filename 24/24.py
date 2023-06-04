@@ -62,8 +62,51 @@ def solve24(solveTry):
     c = solveOps(solveTry[0][2], b, solveTry[1][3])
     return c
 
+def OpsintoWords(opers):
+    """
+    Simple helper function to convert symbols into human text.
+    """
+    try:
+        if opers == "p":
+            opers = "+"
+            return opers
+        if opers == "m":
+            opers = "-"
+            return opers
+        if opers == "t":
+            opers = "x"
+            return opers
+        if opers == "d":
+            opers = "÷"
+            return opers
+    except:
+        print("Check operators.")
+
+
+def intoWords(solveTry):
+    """
+    Function to construct human readable solution.
+    """
+    a = round(solveOps(solveTry[0][0], solveTry[1][0], solveTry[1][1]))
+    b = round(solveOps(solveTry[0][1], a, solveTry[1][2]))
+    c = round(solveOps(solveTry[0][2], b, solveTry[1][3]))
+    message = "Solution found! \n"+\
+           str(solveTry[1][0])+" "+\
+           OpsintoWords(solveTry[0][0])+" "+\
+           str(solveTry[1][1])+" "+" = "+\
+           str(a)+"\n"+\
+           str(a)+" "+\
+           OpsintoWords(solveTry[0][1])+" "+\
+           str(solveTry[1][2])+" "+" = "+\
+           str(b)+"\n"+\
+           str(b)+" "+\
+           OpsintoWords(solveTry[0][0])+" "+\
+           str(solveTry[1][3])+" "+" = "+\
+           str(c)+"\n\n"
+    print(message)
+
 for solveTry in solGridTries:
     if solve24(solveTry) == 24:
-        print (solveTry)
-    else:
-        print (".")
+        intoWords(solveTry)
+    # else:
+    #     print (".")
