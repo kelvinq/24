@@ -87,9 +87,9 @@ def intoWords(solveTry):
     """
     Function to construct human readable solution.
     """
-    a = round(solveOps(solveTry[0][0], solveTry[1][0], solveTry[1][1]))
-    b = round(solveOps(solveTry[0][1], a, solveTry[1][2]))
-    c = round(solveOps(solveTry[0][2], b, solveTry[1][3]))
+    a = solveOps(solveTry[0][0], solveTry[1][0], solveTry[1][1])
+    b = solveOps(solveTry[0][1], a, solveTry[1][2])
+    c = solveOps(solveTry[0][2], b, solveTry[1][3])
     message = "Solution found! \n"+\
            str(solveTry[1][0])+" "+\
            OpsintoWords(solveTry[0][0])+" "+\
@@ -100,7 +100,7 @@ def intoWords(solveTry):
            str(solveTry[1][2])+" "+" = "+\
            str(b)+"\n"+\
            str(b)+" "+\
-           OpsintoWords(solveTry[0][0])+" "+\
+           OpsintoWords(solveTry[0][2])+" "+\
            str(solveTry[1][3])+" "+" = "+\
            str(c)+"\n\n"
     print(message)
